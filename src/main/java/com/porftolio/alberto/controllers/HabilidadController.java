@@ -21,7 +21,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/habilidades")
-@CrossOrigin(origins = {"http://localhost:4200", "http://127.0.0.1:4200"})
+@CrossOrigin(origins = {
+    "http://localhost:4200", 
+    "http://127.0.0.1:4200",
+    "https://alberto-cabello-portfolio.vercel.app",
+    "https://alberto-cabello-portfolio-alberto2908s-projects.vercel.app"
+})
 public class HabilidadController {
 
     private final HabilidadService service;

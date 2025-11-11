@@ -59,6 +59,9 @@ public class SecurityConfig {
                 .maximumSessions(1)
             )
             .authorizeHttpRequests(auth -> auth
+                // Public static assets (skill icons, etc.) - MUST be first to avoid conflicts
+                .requestMatchers("/uploads/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
                 // Public endpoints
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/experiencias/**").permitAll()
@@ -66,8 +69,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/habilidades/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/visits/increment").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/visits/count").permitAll()
-                // Public static assets (skill icons, etc.)
-                .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
+                // Health check and monitoring endpoints
+                .requestMatchers(HttpMethod.GET, "/api/health").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/ping").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/contact/**").permitAll()
                 // User self-service endpoints
                 .requestMatchers(HttpMethod.PUT, "/api/users/me/password").authenticated()
@@ -89,7 +93,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        configuration.setAllowedOrigins(Arrays.asList(
+            "http://localhost:4200", 
+            "https://alberto-cabello-portfolio.vercel.app",
+            "https://alberto-cabello-portfolio-alberto2908s-projects.vercel.app"
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);

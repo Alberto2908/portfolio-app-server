@@ -9,7 +9,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/visits")
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+@CrossOrigin(origins = {
+    "http://localhost:4200", 
+    "https://alberto-cabello-portfolio.vercel.app",
+    "https://alberto-cabello-portfolio-alberto2908s-projects.vercel.app"
+}, allowCredentials = "true")
 public class VisitCounterController {
     
     @Autowired
@@ -25,10 +29,9 @@ public class VisitCounterController {
     }
     
     /**
-     * Get visit count - admin only
+     * Get visit count - public endpoint
      */
     @GetMapping("/count")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<VisitCounter> getVisitCount() {
         VisitCounter counter = visitCounterService.getVisitCount();
         return ResponseEntity.ok(counter);
